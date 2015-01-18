@@ -1,5 +1,5 @@
 " Date Create: 2015-01-17 21:36:40
-" Last Change: 2015-01-18 15:41:32
+" Last Change: 2015-01-18 19:04:13
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -61,11 +61,22 @@ function! vim_template#load() " {{{
 endfunction " }}}
 
 function! vim_template#replaceKeywords() " {{{
-  let g:vim_template#keywords.date = strftime('%Y-%m-%d')
-  let g:vim_template#keywords.time = strftime('%T')
-  let g:vim_template#keywords.datetime = strftime('%Y-%m-%d %T')
-  let g:vim_template#keywords.fname = expand('%:t')
-  let g:vim_template#keywords.ftype = expand('%:e')
+  " Динамические маркеры. {{{
+  let g:vim_template#keywords.date = strftime('%Y-%m-%d') " Текущая дата
+  let g:vim_template#keywords.time = strftime('%T') " Текущее время
+  let g:vim_template#keywords.datetime = strftime('%Y-%m-%d %T') " Текущая дата и время
+  let g:vim_template#keywords.file = expand('%:t') " Имя текущего файла
+  let g:vim_template#keywords.ftype = expand('%:e') " Расширение текущего файла
+  let l:point = strridx(g:vim_template#keywords.file, '.')
+  if l:point != -1
+    let g:vim_template#keywords.fname = strpart(g:vim_template#keywords.file, 0, l:point) " Имя текущего файла без расширения
+  else
+    let g:vim_template#keywords.fname = g:vim_template#keywords.file
+  endif
+  let g:vim_template#keywords.dir = expand('%:h') " Адрес родительского каталога относительно текущего каталога редактора
+  let g:vim_template#keywords.namespace = g:vim_template#keywords.dir . '/' . g:vim_template#keywords.fname " Адрес родительского каталога и имя текущего файла без расширения
+  " }}}
+  normal zR
 	silent! %s/`\(.\{-}\)`/\=eval(submatch(1))/ge
 	silent! %s/<+\(\w\+\)+>/\=(has_key(g:vim_template#keywords, submatch(1)))? g:vim_template#keywords[submatch(1)] : ''/ge
 	if search('<++>')

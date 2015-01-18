@@ -1,5 +1,5 @@
 " Date Create: 2015-01-17 21:36:40
-" Last Change: 2015-01-18 19:04:13
+" Last Change: 2015-01-18 19:05:51
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -76,6 +76,7 @@ function! vim_template#replaceKeywords() " {{{
   let g:vim_template#keywords.dir = expand('%:h') " Адрес родительского каталога относительно текущего каталога редактора
   let g:vim_template#keywords.namespace = g:vim_template#keywords.dir . '/' . g:vim_template#keywords.fname " Адрес родительского каталога и имя текущего файла без расширения
   " }}}
+  " Раскрываем все складки перед заменами, иначе могут быть потеряны некоторые складки полностью
   normal zR
 	silent! %s/`\(.\{-}\)`/\=eval(submatch(1))/ge
 	silent! %s/<+\(\w\+\)+>/\=(has_key(g:vim_template#keywords, submatch(1)))? g:vim_template#keywords[submatch(1)] : ''/ge

@@ -1,5 +1,5 @@
 " Date Create: 2015-01-17 21:36:40
-" Last Change: 2015-01-18 11:05:53
+" Last Change: 2015-01-18 15:41:32
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -51,10 +51,24 @@ function! vim_template#load() " {{{
         if len(l:applicant) != 0
           exe '0r ' . l:applicant
           silent $ delete _
+          call vim_template#replaceKeywords()
           call s:Publisher.new().fire('VimTemplateLoad', {'template': l:applicant})
           return
         endif
       endfor
     endfor
   endif
+endfunction " }}}
+
+function! vim_template#replaceKeywords() " {{{
+  let g:vim_template#keywords.date = strftime('%Y-%m-%d')
+  let g:vim_template#keywords.time = strftime('%T')
+  let g:vim_template#keywords.datetime = strftime('%Y-%m-%d %T')
+  let g:vim_template#keywords.fname = expand('%:t')
+  let g:vim_template#keywords.ftype = expand('%:e')
+	silent! %s/`\(.\{-}\)`/\=eval(submatch(1))/ge
+	silent! %s/<+\(\w\+\)+>/\=(has_key(g:vim_template#keywords, submatch(1)))? g:vim_template#keywords[submatch(1)] : ''/ge
+	if search('<++>')
+    execute 'normal! "_da>'
+	endif
 endfunction " }}}

@@ -1,5 +1,5 @@
 " Date Create: 2015-01-17 21:36:40
-" Last Change: 2015-01-18 19:05:51
+" Last Change: 2015-01-24 12:54:57
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -7,6 +7,9 @@ let s:File = vim_lib#base#File#
 let s:Content = vim_lib#sys#Content#
 let s:Publisher = vim_lib#sys#Publisher#
 
+"" {{{
+" Метод загружает шаблон в текущий буфер, если он пуст.
+"" }}}
 function! vim_template#load() " {{{
   if s:Content.new().isEmpty() " Заполнение только пустых буферов
     let l:file = expand('%:t')
@@ -60,6 +63,21 @@ function! vim_template#load() " {{{
   endif
 endfunction " }}}
 
+"" {{{
+" Метод заменяет в текущем буфере все маркеры, которые имеют вид: <+имя+>.
+" Маркеры заменяются на свойства объекта vim_template#keywords с тем же именем. То есть маркер вида <+mark+> будет заменен на значение свойства vim_template#keywords.mark.
+" Предопределены следующие маркеры:
+"   - date - текущая дата в формате ГГГГ-ММ-ДД
+"   - time - текущее время в формате ЧЧ-ММ-СС
+"   - datetime - текущая дата и время
+"   - fname - имя текущего файла
+"   - ftype - расширение файла
+"   - file - имя и расширение текущего файла
+"   - dir - адрес каталога, содержащего текущий файл
+"   - namespace - адрес каталога, содержащего текущий файл и его имя
+" Метод так же заменяет все конструкции вида `...` на значения, получаемые в результате исполнения содержимого этих конструкции.
+" Маркер <++> используется для указания места установки курсора после вставки шаблона.
+"" }}}
 function! vim_template#replaceKeywords() " {{{
   " Динамические маркеры. {{{
   let g:vim_template#keywords.date = strftime('%Y-%m-%d') " Текущая дата

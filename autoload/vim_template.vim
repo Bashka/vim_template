@@ -1,11 +1,11 @@
 " Date Create: 2015-01-17 21:36:40
-" Last Change: 2015-01-24 12:54:57
+" Last Change: 2015-02-06 10:40:46
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
 let s:File = vim_lib#base#File#
 let s:Content = vim_lib#sys#Content#
-let s:Publisher = vim_lib#sys#Publisher#
+let s:Publisher = vim_lib#sys#Publisher#.new()
 
 "" {{{
 " Метод загружает шаблон в текущий буфер, если он пуст.
@@ -55,7 +55,7 @@ function! vim_template#load() " {{{
           exe '0r ' . l:applicant
           silent $ delete _
           call vim_template#replaceKeywords()
-          call s:Publisher.new().fire('VimTemplateLoad', {'template': l:applicant})
+          call s:Publisher.fire('VimTemplateLoad', {'template': l:applicant})
           return
         endif
       endfor

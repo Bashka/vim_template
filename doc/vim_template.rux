@@ -42,6 +42,7 @@ vim_prj		https://github.com/Bashka/vim_prj
 	Файл			Файл-шаблон
 	|-----------------------|-----------------------|
 	Object.cpp		___.cpp
+	.gitignore		___.gitignore
 	TestObject.cpp		Test___.cpp
 	tests/TestObject.cpp	tests/Test___.cpp
 	tests/file/TestFile.cpp	tests/Test___.cpp

@@ -1,5 +1,5 @@
 " Date Create: 2015-01-17 21:36:40
-" Last Change: 2015-02-06 10:40:46
+" Last Change: 2015-02-09 14:21:53
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -14,6 +14,9 @@ function! vim_template#load() " {{{
   if s:Content.new().isEmpty() " Заполнение только пустых буферов
     let l:file = expand('%:t')
     let l:ext = expand('%:e')
+    if l:ext != ''
+      let l:ext = '.' . l:ext
+    endif
     " Последовательно исследуем каталоги, которые могут хранить шаблоны
     for l:templDir in [g:vim_prj#.prj, g:vim_prj#.user, g:vim_prj#.global]
       let l:templDir = l:templDir . s:File.slash . g:vim_template#.tmpldir
@@ -24,12 +27,12 @@ function! vim_template#load() " {{{
       let l:path = split(expand('%:h'), s:File.slash)
       let l:templates = [] " Шаблоны, сгруппированные по иерархии каталогов пути целевого файла
       " Ищем подходящие шаблоны (сначала наиболее вложенные)
-      call add(l:templates, globpath(l:templDir, join(l:path, s:File.slash) . s:File.slash . '**' . s:File.slash . '*.' . l:ext))
+      call add(l:templates, globpath(l:templDir, join(l:path, s:File.slash) . s:File.slash . '**' . s:File.slash . '*' . l:ext))
       while len(l:path) > 1
         let l:path = l:path[0:-2]
-        call add(l:templates, globpath(l:templDir, join(l:path, s:File.slash) . s:File.slash . '**' . s:File.slash . '*.' . l:ext))
+        call add(l:templates, globpath(l:templDir, join(l:path, s:File.slash) . s:File.slash . '**' . s:File.slash . '*' . l:ext))
       endwhile
-      call add(l:templates, globpath(l:templDir, '*.' . l:ext))
+      call add(l:templates, globpath(l:templDir, '*' . l:ext))
       " Проверяем последовательно каждую группу
       for l:group in l:templates
         " Ищем наиболее подходящий файл шаблона

@@ -1,9 +1,10 @@
 " Date Create: 2015-01-17 10:48:16
-" Last Change: 2015-02-03 10:41:43
+" Last Change: 2015-02-13 16:28:11
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
 let s:Plugin = vim_lib#sys#Plugin#
+let s:System = vim_lib#sys#System#.new()
 
 let s:p = s:Plugin.new('vim_template', '1', {'plugins': ['vim_prj']})
 
@@ -13,6 +14,8 @@ if !exists('g:vim_template#keywords')
   let g:vim_template#keywords = {}    " Словарь маркеров.
 endif
 
-call s:p.au('BufReadPost,BufNewFile', '*', 'load')
+function! s:p.run() " {{{
+    call s:System.au('BufReadPost,BufNewFile', function('vim_template#load'))
+endfunction " }}}
 
 call s:p.reg()

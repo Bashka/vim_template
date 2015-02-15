@@ -1,5 +1,5 @@
 " Date Create: 2015-01-17 10:48:16
-" Last Change: 2015-02-13 16:28:11
+" Last Change: 2015-02-15 12:16:22
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -15,7 +15,7 @@ if !exists('g:vim_template#keywords')
 endif
 
 function! s:p.run() " {{{
-    call s:System.au('BufReadPost,BufNewFile', function('vim_template#load'))
+  call s:System.au('BufReadPost,BufNewFile', function('vim_template#load'))
 endfunction " }}}
 
 call s:p.reg()
